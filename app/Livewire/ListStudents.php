@@ -5,15 +5,19 @@ namespace App\Livewire;
 use App\Models\Student;
 use Livewire\Component;
 use Illuminate\Database\Eloquent\Builder;
+use Livewire\Attributes\Url;
 use Livewire\WithPagination;
 
 
 class ListStudents extends Component
 {
     use WithPagination;
-
+    #[Url(history: true)]
      public string $search = '';
-     public string $sortColumn = 'name', $sortDirection = 'asc';
+     #[Url(history: true)]
+     public string $sortColumn = 'name';
+     #[Url(history: true)]
+     public string $sortDirection = 'asc';
 
 
     public function render()
