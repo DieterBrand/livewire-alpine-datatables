@@ -29,6 +29,35 @@
                     <input wire:model.live.debounce.500ms="search" type="text" placeholder="Search students data..." id="search" autocomplete="off"
                         class="block rounded-lg border-0 py-2 pl-10 text-gray-900 ring-1 ring-inset ring-gray-200 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
                 </div>
+                <div x-show="$wire.selectedStudentIds.length > 0"
+                    class="flex flex-col sm:flex-row gap-2 sm:justify-end col-span-5">
+                    <div class="flex flex-row-reverse justify-end sm:justify-start sm:flex-row gap-2">
+                        <div class="flex items-center gap-1 text-md text-gray-600">
+                            <span x-text="$wire.selectedStudentIds.length"></span>
+                            <span>selected</span>
+                        </div>
+                        <div class="flex items-center px-3">
+                            <div class="h-[75%] w-[1px] bg-gray-300"></div>
+                        </div>
+                        <x-check-all-button />
+                        <form wire:submit="deleteStudents" wire:confirm="Are you sure you want to delete these Records?">
+                            <button type="submit"
+                                class="flex items-center gap-2 rounded-lg border px-3 py-1.5 bg-white font-medium text-md text-gray-700 hover:bg-gray-200 disabled:cursor-not-allowed disabled:opacity-75">
+                                <x-icons.delete />
+                                Delete
+                            </button>
+                        </form>
+                    </div>
+                    <div class="hidden sm:flex">
+                        <form wire:submit="export">
+                            <button type="submit"
+                                class="flex items-center gap-2 rounded-lg border px-3 py-1.5 bg-white font-medium text-md text-gray-700 hover:bg-gray-200">
+                                <x-icons.arrow-down-tray />
+                                Export
+                            </button>
+                        </form>
+                    </div>
+                </div>
             </div>
 
             <div class="mt-8 flex flex-col">
@@ -38,6 +67,9 @@
                             <table class="min-w-full divide-y divide-gray-300">
                                 <thead class="bg-gray-50">
                                     <tr>
+                                        <th scope="col"
+                                        class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">
+                                    </th>
                                         <th scope="col"
                                             class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">
                                             <x-sortable column="id" :$sortColumn :sortDirection="$sortDirection">
@@ -74,6 +106,10 @@
                                 <tbody class="divide-y divide-gray-200 bg-white">
                                     @foreach ($students as $student)
                                     <tr>
+                                        <td
+                                            class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
+                                            <input wire:model="selectedStudentIds" value="{{$student->id}}" type="checkbox" class="rounded border-gray-300 shadow">
+                                        </td>
                                         <td
                                             class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
                                             {{$student->id}}

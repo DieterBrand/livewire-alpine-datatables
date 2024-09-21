@@ -2,22 +2,26 @@
 
 namespace App\Livewire;
 
+use App\Exports\StudentsExport;
 use App\Models\Student;
 use Livewire\Component;
 use Illuminate\Database\Eloquent\Builder;
 use Livewire\Attributes\Url;
 use Livewire\WithPagination;
+use Filament\Notifications\Notification;
 
 
 class ListStudents extends Component
 {
     use WithPagination;
     #[Url(history: true)]
-     public string $search = '';
+    public string $search = '';
+    #[Url(history: true)]
+    public string $sortColumn = 'name';
      #[Url(history: true)]
-     public string $sortColumn = 'name';
-     #[Url(history: true)]
-     public string $sortDirection = 'asc';
+    public string $sortDirection = 'asc';
+
+    public array $selectedStudentIds = [];
 
 
     public function render()
@@ -57,8 +61,28 @@ class ListStudents extends Component
 
     public function deleteStudent($studentId)
     {
+        //Authorization check
+
         Student::find($studentId)->delete();
 
         return redirect(route('students.index'));
+    }
+
+    public function deleteStudents()
+    {
+        //Student::destroy($this->selectedStudentIds);
+        foreach($this->selectedStudentIds as $id) {
+            $this->deleteStudent($id);
+        }
+
+        Notification::make()
+        ->title('Selected records deleted successfully')
+        ->success()
+        ->send();
+    }
+
+    public function export()
+    {
+        return (new StudentsExport($this->selectedStudentIds))->download(now().'_students.xlsx');
     }
 }
