@@ -68,7 +68,9 @@
                                 <thead class="bg-gray-50">
                                     <tr>
                                         <th scope="col"
-                                        class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">
+                                            class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">
+                                            {{-- <input type="checkbox" class="rounded border-gray-300 shadow"> --}}
+                                            <x-check-all />
                                     </th>
                                         <th scope="col"
                                             class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">
@@ -105,7 +107,7 @@
                                 </thead>
                                 <tbody class="divide-y divide-gray-200 bg-white">
                                     @foreach ($students as $student)
-                                    <tr>
+                                    <tr wire:key="{{ $student->id}}">
                                         <td
                                             class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
                                             <input wire:model="selectedStudentIds" value="{{$student->id}}" type="checkbox" class="rounded border-gray-300 shadow">

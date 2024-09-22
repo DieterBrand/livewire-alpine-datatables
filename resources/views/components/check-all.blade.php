@@ -21,6 +21,7 @@
                     return this.$wire.selectedStudentIds.length === 0;
                 },
                 handleChange(e) {
+                    console.log(e);
                     e.target.checked ? this.selectAll() : this.deselectAll()
                 },
                 selectAll() {
@@ -41,6 +42,7 @@
                         this.$refs.checkAllCheckbox.indeterminate = false;
                     } else {
                         this.$refs.checkAllCheckbox.indeterminate = true;
+                        this.$refs.checkAllCheckbox.checked = false;
                     }
                 }
             }

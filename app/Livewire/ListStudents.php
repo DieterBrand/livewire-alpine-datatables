@@ -21,7 +21,7 @@ class ListStudents extends Component
      #[Url(history: true)]
     public string $sortDirection = 'asc';
 
-    public array $selectedStudentIds = [];
+    public array $selectedStudentIds = [], $studentIdsOnPage = [], $allStudentIds;
 
 
     public function render()
@@ -29,9 +29,13 @@ class ListStudents extends Component
         $query = Student::query();
         $query = $this->applySearch($query);
         $query = $this->applySort($query);
+        $this->allStudentIds = $query->pluck('id')->map(fn($id) => (string) $id)->toArray();
+        $students = $query->paginate(10);
+        $this->studentIdsOnPage = $students->map(fn($student) => (string) $student->id)->toArray();
 
+        // dd($this->studentIdsOnPage);
         return view('livewire.list-students',[
-            'students' => $query->paginate(10)
+            'students' => $students,
         ]);
     }
     public function sortBy(string $column)
